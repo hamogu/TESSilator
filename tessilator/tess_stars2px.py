@@ -122,29 +122,25 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import numpy as np
+
 import os
 import argparse
-from astropy.coordinates import SkyCoord
-import astropy.units as u
-from astropy.time import Time
+
 import sys
 import datetime
 import json
-try: # Python 3.x
-    from urllib.parse import quote as urlencode
-    from urllib.request import urlretrieve
-    from urllib.parse import urlparse
-except ImportError:  # Python 2.x
-    from urllib import pathname2url as urlencode
-    from urllib import urlretrieve
-    from urlparse import urlparse
-try: # Python 3.x
-    import http.client as httplib 
-except ImportError:  # Python 2.x
-    import httplib
-import scipy.optimize as opt
+
+from urllib.parse import quote as urlencode
+from urllib.parse import urlparse
+import http.client as httplib
 import base64
+
+import numpy as np
+from astropy.coordinates import SkyCoord
+import astropy.units as u
+from astropy.time import Time
+import scipy.optimize as opt
+
 
 class Levine_FPG():
     """Al Levine Focal Plane Geometry Methods

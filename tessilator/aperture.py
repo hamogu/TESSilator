@@ -20,13 +20,11 @@ coordinates to image (X-Y) pixels.
 ####################################IMPORTS####################################
 ###############################################################################
 # Internal
-import warnings
 import inspect
 import sys
 
 # Third party
 import numpy as np
-import json
 
 from scipy import stats
 

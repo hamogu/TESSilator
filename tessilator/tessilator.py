@@ -13,7 +13,8 @@ The TESSILATOR
 #Internal
 
 from datetime import datetime
-import sys, os
+import sys
+import os
 import inspect
 from glob import glob
 
@@ -25,7 +26,6 @@ from collections.abc import Iterable
 from astropy.table import Table
 from astropy.io import ascii, fits
 from astropy.coordinates import SkyCoord
-import astropy.units as u
 from astroquery.mast import Tesscut
 import matplotlib.pyplot as plt
 import matplotlib as mpl
