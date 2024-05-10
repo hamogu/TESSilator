@@ -1,6 +1,5 @@
 from tessilator import tessilator
 import numpy as np
-import os
 import logging
 from astropy.table import join
 from astropy.io import ascii

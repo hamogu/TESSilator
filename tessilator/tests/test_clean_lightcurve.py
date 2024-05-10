@@ -1,24 +1,5 @@
-from ..lc_analysis import aic_selector, clean_edges_outlier, clean_edges_scatter, detrend_lc, get_time_segments, logger, make_lc, norm_choice, remove_sparse_data, sin_fit, cbv_fit_test
+from ..lc_analysis import make_lc
 
-from ..logger import logger_tessilator
-# Third party imports
-import numpy as np
-import os
-import json
-
-
-from astropy.table import Table
-import astropy.units as u
-from astropy.stats import akaike_info_criterion_lsq
-
-from scipy.stats import median_abs_deviation as MAD
-from scipy.optimize import curve_fit
-from scipy.stats import iqr
-
-import itertools as it
-from operator import itemgetter
-
-from astropy.table import Table
 from astropy.io import ascii
 
 targ_dir = './tessilator/tests/targets_tests'

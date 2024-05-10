@@ -1,8 +1,6 @@
 import inspect
 import numpy as np
-import math
 import matplotlib.pyplot as plt
-from scipy.stats import median_abs_deviation
 from ..lc_analysis import aic_selector
 from ..logger import logger_tessilator
 

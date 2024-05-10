@@ -27,7 +27,8 @@ import pylab as pl
 
 
 # Local application
-import scipy.linalg, scipy.special
+import scipy.linalg
+import scipy.special
 from .logger import logger_tessilator
 ###############################################################################
 ###############################################################################
