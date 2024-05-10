@@ -1,13 +1,9 @@
 # import the remaining modules required for the TESS analysis
 
-import os
 import numpy as np
-from astropy.io import ascii, fits
-from astropy.table import Table
+from astropy.io import ascii
 from ..aperture import aper_run
 from glob import glob
-from ..logger import logger_tessilator
-
 
 
 def test_aper_run():

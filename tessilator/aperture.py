@@ -20,13 +20,11 @@ coordinates to image (X-Y) pixels.
 ####################################IMPORTS####################################
 ###############################################################################
 # Internal
-import warnings
 import inspect
 import sys
 
 # Third party
 import numpy as np
-import json
 
 from scipy import stats
 
@@ -42,7 +40,7 @@ from photutils.aperture import aperture_photometry, ApertureStats
 
 
 # Local application
-from .fixedconstants import *
+from .fixedconstants import Zpt
 from .logger import logger_tessilator
 ###############################################################################
 ###############################################################################

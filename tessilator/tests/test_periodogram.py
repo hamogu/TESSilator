@@ -1,30 +1,16 @@
 
-import warnings
 
 # Third party imports
 import numpy as np
-import os
 
 from astropy.table import Table
-from astropy.coordinates import SkyCoord
 from astropy.timeseries import LombScargle
-from astropy.wcs import WCS
-from astropy.io import ascii, fits
-import astropy.units as u
-from astropy.stats import akaike_info_criterion_lsq
-from ..logger import logger_tessilator
 
 
-from scipy.stats import median_abs_deviation as MAD
-from scipy.optimize import curve_fit
-import itertools as it
-
-import matplotlib.pyplot as plt 
-from collections.abc import Iterable
+import matplotlib.pyplot as plt
 
 # Local application imports
-from ..fixedconstants import *
-from ..periodogram import check_for_jumps, gauss_fit, gauss_fit_peak, get_next_peak, get_Gauss_params_pg, is_period_cont, logger, mean_of_arrays, run_ls, sin_fit
+from ..periodogram import get_next_peak, get_Gauss_params_pg, logger
 
 
 start, stop, typical_timestep = 0, 27, 0.007 # in days

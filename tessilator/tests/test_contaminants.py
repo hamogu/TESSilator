@@ -1,10 +1,9 @@
 # test_contaminants.py
-import sys, os
+import sys
 import numpy as np
-sys.path.append('..')
-#from ..modules_to_import import *
+sys.path.append("..")
 from ..contaminants import flux_fraction_contaminant
-from ..logger import logger_tessilator
+
 
 def test_biser_millman():
     t_targ0 = 0.0**2/(2.0*0.65**(2))
