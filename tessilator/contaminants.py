@@ -30,6 +30,7 @@ import warnings
 import inspect
 import sys
 import traceback
+import math
 
 
 # Third party imports
@@ -123,15 +124,15 @@ def run_sql_query_contaminants(t_target, pix_radius=10., mag_lim=3., tot_attempt
 
 
 def flux_fraction_contaminant(ang_sep, s, d_thr=5.e-6):
-    '''Quantify the flux contamination from a neighbouring source.
+    """Quantify the flux contamination from a neighbouring source.
 
     Calculates the fraction of flux from a neighbouring contaminating source
     that gets scattered into the aperture. The analytic function uses equation
     3b-10 from `Biser & Millman (1965) <https://books.google.co.uk/books?id=5XBGAAAAYAAJ>`_, which is a double converging sum with infinite limits, given by
-    
+
     .. math::
 
-       f_{\\rm bg} = e^{-t} \sum_{n=0}^{n\\to{\infty}} {\Bigg\{\\frac{t^{n}}{n!}\\bigg[1-e^{-s}\sum_{k=0}^{n}{\\frac{s^{k}}{k!}}} \\bigg]\Bigg\}
+       f_{\\rm bg} = e^{-t} \\sum_{n=0}^{n\\to{\\infty}} {\\Bigg\{\\frac{t^{n}}{n!}\\bigg[1-e^{-s}\\sum_{k=0}^{n}{\\frac{s^{k}}{k!}}} \\bigg]\\Bigg\\}
 
     To solve the equation computationally, the summation terminates once the
     difference from the nth iteration is less than some given threshold value, `d_thr`.
@@ -140,25 +141,25 @@ def flux_fraction_contaminant(ang_sep, s, d_thr=5.e-6):
     ----------
     ang_sep : `float`
         The angular distance (in arcseconds) between a contaminant and the
-        aperture centre. 
+        aperture centre.
     s : `float`
         For a given aperture size, Rad (in pixels)
         and an FWHM of the TESS PSF, exprf (set at 0.65 pixels), :math:`s = {\\rm Rad}^2/(2.0*{\\rm exprf}^2)`
     d_thr : `float`, optional, default=5.e-6
         The threshold value to stop the summations. When the next component contributes a value which is
-        less than d_thr, the summation ends. 
+        less than d_thr, the summation ends.
 
     returns
     -------
     frac_flux_in_aperture : `float`
         Fraction of contaminant flux that gets scattered into the aperture.
-    '''
+    """
     n, n_z = 0, 0
     t = (ang_sep/pixel_size)**2/(2.0*exprf**(2)) # measured in pixels
     while True:
-        sk = np.sum([(s**(k)/np.math.factorial(k)) for k in range(0,n+1)])
+        sk = np.sum([(s ** (k) / math.factorial(k)) for k in range(0, n + 1)])
         sx = 1.0 - (np.exp(-s)*sk)
-        n_0 = ((t**n)/np.math.factorial(n))*sx
+        n_0 = ((t**n) / math.factorial(n)) * sx
         n_z += n_0
         if np.abs(n_0) > d_thr:
             n += 1
