@@ -23,7 +23,6 @@ import matplotlib.pyplot as plt
 from collections.abc import Iterable
 
 # Local application imports
-from ..fixedconstants import *
 from ..periodogram import check_for_jumps, gauss_fit, gauss_fit_peak, get_next_peak, get_Gauss_params_pg, is_period_cont, logger, mean_of_arrays, run_ls, sin_fit
 
 

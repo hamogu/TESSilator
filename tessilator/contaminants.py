@@ -39,7 +39,7 @@ from astropy.table import Table, Row
 
 
 # Local application
-from .fixedconstants import *
+from .fixedconstants import pixel_size, exprf
 from .logger import logger_tessilator
 ###############################################################################
 ###############################################################################

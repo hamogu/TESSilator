@@ -42,7 +42,7 @@ from photutils.aperture import aperture_photometry, ApertureStats
 
 
 # Local application
-from .fixedconstants import *
+from .fixedconstants import Zpt
 from .logger import logger_tessilator
 ###############################################################################
 ###############################################################################

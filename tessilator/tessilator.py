@@ -32,14 +32,14 @@ import matplotlib as mpl
 import math
 
 # Local application imports
-from .aperture import *
-from .lc_analysis import *
-from .periodogram import *
-from .detrend_cbv import *
-from .contaminants import *
-from .maketable import *
-from .makeplots import *
-from .fixedconstants import *
+from .aperture import aper_run
+from .lc_analysis import make_lc, make_lc_corr_plot
+from .periodogram import is_period_cont, run_ls
+from .detrend_cbv import get_cbv_scc
+from .contaminants import contamination
+from .maketable import get_gaia_data
+from .makeplots import make_plot
+from .fixedconstants import sec_max
 from .tess_stars2px import tess_stars2px_function_entry
 from .logger import logger_tessilator
 

@@ -39,7 +39,6 @@ from collections.abc import Iterable
 
 
 # Local application imports
-from .fixedconstants import *
 from .logger import logger_tessilator
 
 ###############################################################################
