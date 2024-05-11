@@ -806,11 +806,11 @@ def shuffle_check(cln_lc, LS_dict, shuffle_sections=False, n_shuf_runs=5000, p_m
 
             if make_plot_shuf:
                 fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(12,3))
-                ax[0].set_xlabel('$\log_{10}$period [d]')
+                ax[0].set_xlabel(r"$\log_{10}$period [d]")
                 ax[0].set_ylabel('number of trials')
                 ax[0].hist(np.log10(period_arr), bins=bin1)
                 ax[0].axhline(np.median(num_log10_per1), color='darkorange')
-                ax[1].set_xlabel('$\log_{10}$period [d]')
+                ax[1].set_xlabel(r"$\log_{10}$period [d]")
                 ax[1].set_ylabel('normalised PDF')
                 ax[1].plot(log10_per2, num_log10_per2)
                 if gauss_plot:

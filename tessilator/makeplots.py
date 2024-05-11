@@ -204,9 +204,14 @@ def make_plot(im_plot, clean, LS_dict, scc, t_table, name_target, plot_dir='./pl
     axs[1,0].text(0.99,0.80, f"Gmag = {float(t_table['Gmag']):.3f}",
                   fontsize=lsize, horizontalalignment='right',
                   transform=axs[1,0].transAxes)
-    axs[1,0].text(0.99,0.70, "$\log (f_{\\rm bg}/f_{*})$ = "
-                  f"{float(t_table['log_tot_bg']):.3f}", fontsize=lsize,
-                  horizontalalignment='right', transform=axs[1,0].transAxes)
+    axs[1, 0].text(
+        0.99,
+        0.70,
+        r"$\log (f_{\rm bg}/f_{*})$ = " f"{float(t_table['log_tot_bg']):.3f}",
+        fontsize=lsize,
+        horizontalalignment="right",
+        transform=axs[1, 0].transAxes,
+    )
     leg = axs[1,0].legend(loc='lower right')
     leg.legendHandles[1]._sizes = [30]
     leg.legendHandles[2]._sizes = [30]
@@ -228,11 +233,17 @@ def make_plot(im_plot, clean, LS_dict, scc, t_table, name_target, plot_dir='./pl
     s = axs[1,1].scatter(LS_dict['phase_x'], LS_dict["phase_y"],
                          c=LS_dict['phase_col'], cmap=cmap_use, vmin=0.5,
                          vmax=N_cyc+0.5)
-    axs[1,1].text(0.01, 0.90, f"Amplitude = {LS_dict['pops_vals'][1]:.3f}, "
-                  f"Scatter = {LS_dict['phase_scatter']:.3f}, "
-                  f"$\chi^{2}$ = {LS_dict['phase_chisq']:.3f}, "
-                  "$f_{\\rm dev}$"+ f"= {LS_dict['frac_phase_outliers']:.3f}", fontsize=lsize,
-                  horizontalalignment='left', transform=axs[1,1].transAxes)
+    axs[1, 1].text(
+        0.01,
+        0.90,
+        f"Amplitude = {LS_dict['pops_vals'][1]:.3f}, "
+        f"Scatter = {LS_dict['phase_scatter']:.3f}, "
+        f"$\\chi^{2}$ = {LS_dict['phase_chisq']:.3f}, "
+        "$f_{\\rm dev}$" + f"= {LS_dict['frac_phase_outliers']:.3f}",
+        fontsize=lsize,
+        horizontalalignment="left",
+        transform=axs[1, 1].transAxes,
+    )
 
     cbaxes = inset_axes(axs[1,1], width="100%", height="100%",
                         bbox_to_anchor=(0.79, 0.92, 0.20, 0.05),

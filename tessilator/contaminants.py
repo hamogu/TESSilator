@@ -123,15 +123,17 @@ def run_sql_query_contaminants(t_target, pix_radius=10., mag_lim=3., tot_attempt
 
 
 def flux_fraction_contaminant(ang_sep, s, d_thr=5.e-6):
-    '''Quantify the flux contamination from a neighbouring source.
+    """Quantify the flux contamination from a neighbouring source.
 
     Calculates the fraction of flux from a neighbouring contaminating source
     that gets scattered into the aperture. The analytic function uses equation
-    3b-10 from `Biser & Millman (1965) <https://books.google.co.uk/books?id=5XBGAAAAYAAJ>`_, which is a double converging sum with infinite limits, given by
-    
+    3b-10 from
+    `Biser & Millman (1965) <https://books.google.co.uk/books?id=5XBGAAAAYAAJ>`_,
+    which is a double converging sum with infinite limits, given by
+
     .. math::
 
-       f_{\\rm bg} = e^{-t} \sum_{n=0}^{n\\to{\infty}} {\Bigg\{\\frac{t^{n}}{n!}\\bigg[1-e^{-s}\sum_{k=0}^{n}{\\frac{s^{k}}{k!}}} \\bigg]\Bigg\}
+       f_{\\rm bg} = e^{-t} \\sum_{n=0}^{n\\to{\\infty}} {\\Bigg\\{\\frac{t^{n}}{n!}\\bigg[1-e^{-s}\\sum_{k=0}^{n}{\\frac{s^{k}}{k!}}} \\bigg]\\Bigg\\}
 
     To solve the equation computationally, the summation terminates once the
     difference from the nth iteration is less than some given threshold value, `d_thr`.
@@ -140,19 +142,19 @@ def flux_fraction_contaminant(ang_sep, s, d_thr=5.e-6):
     ----------
     ang_sep : `float`
         The angular distance (in arcseconds) between a contaminant and the
-        aperture centre. 
+        aperture centre.
     s : `float`
         For a given aperture size, Rad (in pixels)
         and an FWHM of the TESS PSF, exprf (set at 0.65 pixels), :math:`s = {\\rm Rad}^2/(2.0*{\\rm exprf}^2)`
     d_thr : `float`, optional, default=5.e-6
         The threshold value to stop the summations. When the next component contributes a value which is
-        less than d_thr, the summation ends. 
+        less than d_thr, the summation ends.
 
     returns
     -------
     frac_flux_in_aperture : `float`
         Fraction of contaminant flux that gets scattered into the aperture.
-    '''
+    """
     n, n_z = 0, 0
     t = (ang_sep/pixel_size)**2/(2.0*exprf**(2)) # measured in pixels
     while True:
@@ -170,21 +172,22 @@ def flux_fraction_contaminant(ang_sep, s, d_thr=5.e-6):
 
 
 def contamination(t_targets, Rad=1.0, n_cont=10):
-    '''Estimate flux from neighbouring contaminant sources.
+    """Estimate flux from neighbouring contaminant sources.
 
     The purpose of this function is to estimate the amount of flux incident in
     the TESS aperture that originates from neighbouring, contaminating sources.
     Given that the passbands from TESS (T-band, 600-1000nm) are similar to Gaia
     RP magnitude, and that Gaia can observe targets down to G~21, the Gaia DR3
     catalogue is used to quantify contamination.
-    
+
     For each target in the input file, the function "run_sql_query_contaminants"
     returns a catalogue of Gaia DR3 objects of all neighbouring sources that
     are within a chosen pixel radius and are brighter than $RP_{source} + d_{thr}$.
-    
+
     The Rayleigh formula is used to calculate the fraction of flux incident in
     the aperture from the target, and the function "flux_fraction_contaminant"
-    uses an analytical formula `(Biser & Millman 1965, equation 3b-10) <https://books.google.co.uk/books?id=5XBGAAAAYAAJ>`_ to
+    uses an analytical formula
+    `(Biser & Millman 1965, equation 3b-10) <https://books.google.co.uk/books?id=5XBGAAAAYAAJ>`_ to
     calculate the flux contribution from all neighbouring sources incident in
     the aperture.
 
@@ -204,7 +207,7 @@ def contamination(t_targets, Rad=1.0, n_cont=10):
         the flux contamination.
     t_cont : `astropy.table.Table`
         A table of Gaia DR3 data for the contaminants.
-    '''
+    """
     con1, con2, con3 = [], [], []
     # Create empty table to fill with results from the contamination analysis.
     t_cont = Table(names=('source_id_target', 'source_id', 'RA',\

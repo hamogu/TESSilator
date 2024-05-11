@@ -316,23 +316,24 @@ def table_from_table(input_table, name_is_source_id=False):
 
 
 def get_gaia_data(gaia_table, name_is_source_id=False, type_coord='icrs', gaia_sys=True):
-    '''Reads the input table and returns a table in the correct format for
+    """Reads the input table and returns a table in the correct format for
     TESSilator.
 
-    | The table must be in comma-separated variable format, in either of these
-      3 ways:
-    | 1) A table with a single column containing the source identifier
-    |     * note that this is the preferred method since the target identified
-            in the Gaia query is unambiguously the same as the input value.
-            Also, the name match runs faster than the coordinate match using
-            astroquery.
-    | 2) A table with sky-coordinates in either the 'icrs' (default),
-         'galactic', or 'ecliptic' system.
-    |     * note this is slower because of the time required to run the Vizier
-            query.
-    | 3) A table with all 7 columns already made.
+    The table must be in comma-separated variable format, in either of these
+    3 ways:
 
-    parameters
+    - A table with a single column containing the source identifier
+         *Note that this is the preferred method since the target identified
+         in the Gaia query is unambiguously the same as the input value.
+         Also, the name match runs faster than the coordinate match using
+         astroquery.*
+    - A table with sky-coordinates in either the 'icrs' (default),
+         'galactic', or 'ecliptic' system.
+         *Note this is slower because of the time required to run the Vizier
+         query.*
+    - A table with all 7 columns already made.
+
+    Parameters
     ----------
     gaia_table : `astropy.table.Table`
         The input table
@@ -347,11 +348,12 @@ def get_gaia_data(gaia_table, name_is_source_id=False, type_coord='icrs', gaia_s
     gaia_sys : `bool`, optional, default=True
         Choose to format the data based on Gaia DR3. Note that no contamination can
         be calculated if this is False.
-    
-    results
+
+    Returns
     -------
     tbl : `astropy.table.Table`
-        | The table ready for TESSilator analysis, with the columns:
+        The table ready for TESSilator analysis, with the columns:
+
         * name: the preferred choice of source identifier
         * source_id: the Gaia DR3 source identifier
         * ra: right ascension (icrs) or longditude (galactic,
@@ -362,7 +364,8 @@ def get_gaia_data(gaia_table, name_is_source_id=False, type_coord='icrs', gaia_s
         * Gmag: the apparent G-band magnitude from Gaia DR3
         * BPmag: the apparent BP-band magnitude from Gaia DR3
         * RPmag: the apparent RP-band magnitude from Gaia DR3
-    '''
+
+    """
     if len(gaia_table.colnames) == 1:
         tbl = table_from_simbad(gaia_table)
     elif len(gaia_table.colnames) == 2:
