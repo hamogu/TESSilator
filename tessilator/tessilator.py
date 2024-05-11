@@ -52,29 +52,31 @@ from .logger import logger_tessilator
 # initialize the logger object
 logger = logger_tessilator(__name__) 
 
+STARTUP_STRING = r"""
+
+**********************************************************************
+****|******_*********_*********_*********_*********_*********_********
+****|*****/*\*******/*\*******/*\*******/*\*******/*\*******/*\*******
+****|****/***\*****/***\*****/***\*****/***\*****/***\*****/***\******
+****|***/*****\***/*****\***/*****\***/*****\***/*****\***/*****\*****
+****|**/*******\_/*******\_/*******\_/*******\_/*******\_/*******\****
+****|_____________________________________________________________****
+**********************************************************************
+**********************WELCOME TO THE TESSILATOR***********************
+********The one-stop shop for measuring TESS rotation periods*********
+**********************************************************************
+**********************************************************************
+
+If this package is useful for research leading to publication we
+would appreciate the following acknowledgement:
+'The data from the Transiting Exoplanet Survey Satellite (TESS) was
+acquired using the tessilator software package (Binks et al. 2024).'
+
+"""
 
 
-
+print(STARTUP_STRING)
 start = datetime.now()
-print("\n")
-print("**********************************************************************")
-print("****|******_*********_*********_*********_*********_*********_********")
-print("****|*****/*\*******/*\*******/*\*******/*\*******/*\*******/*\*******")
-print("****|****/***\*****/***\*****/***\*****/***\*****/***\*****/***\******")
-print("****|***/*****\***/*****\***/*****\***/*****\***/*****\***/*****\*****")
-print("****|**/*******\_/*******\_/*******\_/*******\_/*******\_/*******\****")
-print("****|_____________________________________________________________****")
-print("**********************************************************************")
-print("**********************WELCOME TO THE TESSILATOR***********************")
-print("********The one-stop shop for measuring TESS rotation periods*********")
-print("**********************************************************************")
-print("**********************************************************************")
-print("\n")
-print("If this package is useful for research leading to publication we")
-print("would appreciate the following acknowledgement:")
-print("'The data from the Transiting Exoplanet Survey Satellite (TESS) was")
-print("acquired using the tessilator software package (Binks et al. 2024).'")
-print("\n")
 print("Start time: ", start.strftime("%d/%m/%Y %H:%M:%S"))
 
 
@@ -1741,9 +1743,8 @@ def one_source_cutout(target, LC_con, flux_con, make_plots, final_table,
                       choose_sec=None, store_lc=False, cutout_size=20,
                       tot_attempts=3, cap_files=None, fits_dir='fits',
                       lc_dir='lc', pg_dir='pg', fix_noise=False):
-    '''Download cutouts and run lightcurve/periodogram analysis for one target.
+    """Download cutouts and run lightcurve/periodogram analysis for one target.
 
-    Called by the function "all_sources".
 
     parameters
     ----------
@@ -1771,12 +1772,10 @@ def one_source_cutout(target, LC_con, flux_con, make_plots, final_table,
         applied.
     choose_sec : `None`, `int` or `Iterable`, optional, default=None
         The sector, or sectors required for download.
-        
+
         * If `None`, TESScut will download all sectors available for the
-        target.
-
+          target.
         * If `int`, TESScut will attempt to download this sector number.
-
         * If `Iterable`, TESScut will attempt to download a list of sectors.
 
     cutout_size : `float`, optional, default=20
@@ -1789,18 +1788,13 @@ def one_source_cutout(target, LC_con, flux_con, make_plots, final_table,
     fits_dir : `str`, optional, default='fits'
         The name of the directory to store the fits files.
     lc_dir : `str`, optional, default='lc'
-        The directory used to store the lightcurve files if store_lc==True
+        The directory used to store the lightcurve files if ``store_lc==True``
     pg_dir : `str`, optional, default='pg'
         The directory used to store the periodogram data.
     fix_noise : `bool`, optional, default=False
         Choose to apply corrections accounting for systematic noise.
+    """
 
-    returns
-    -------
-    Nothing returned. Results are saved to table and plots are generated (if
-    specified). 
-    '''
-    
     # Set the contaminant parameters to the default values in case
     # they have not been added
     if 'log_tot_bg' not in target.colnames:
@@ -1886,7 +1880,7 @@ def all_sources_cutout(t_targets, period_file, LC_con, flux_con, make_plots,
                        cap_files=None, res_ext='results', lc_ext='lc',
                        pg_ext='pg', fits_ext='fits', keep_data=False,
                        fix_noise=False):
-    '''Run the tessilator for all targets.
+    """Run the tessilator for all targets.
 
     parameters
     ----------
@@ -1917,7 +1911,7 @@ def all_sources_cutout(t_targets, period_file, LC_con, flux_con, make_plots,
 
         * n_contaminants: number of contaminant sources (optional)
 
-    period_file : `str` 
+    period_file : `str`
         Name of the file to store periodogram results.
     LC_con : `bool`
         Decides if a lightcurve analysis is to be performed for the 5 strongest
@@ -1932,7 +1926,7 @@ def all_sources_cutout(t_targets, period_file, LC_con, flux_con, make_plots,
         files.
     choose_sec : `None`, `int`, or `Iterable`, optional, default=None
         The sector, or sectors required for download.
-        
+
         * If `None`, TESScut will download all sectors available for the
           target.
 
@@ -1964,12 +1958,7 @@ def all_sources_cutout(t_targets, period_file, LC_con, flux_con, make_plots,
         Choose to save the input data to file.
     fix_noise : `bool`, optional, default=False
         Choose to apply the noise correction to the cleaned lightcurve.
-
-    returns
-    -------
-    Nothing returned. The final table is saved to file and the program
-    terminates.
-    '''
+    """
 
     fits_dir = make_dir(fits_ext, ref_name)
     lc_dir = make_dir(lc_ext, ref_name)
