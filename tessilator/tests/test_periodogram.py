@@ -22,6 +22,8 @@ import itertools as it
 import matplotlib.pyplot as plt 
 from collections.abc import Iterable
 
+import pytest
+
 # Local application imports
 from ..fixedconstants import *
 from ..periodogram import check_for_jumps, gauss_fit, gauss_fit_peak, get_next_peak, get_Gauss_params_pg, is_period_cont, logger, mean_of_arrays, run_ls, sin_fit
@@ -105,40 +107,51 @@ def test_multi_peak_fit():
     for i in range(3):
         print(LS_dict[f'period_{i+1}'])
         assert((LS_dict[f'period_{i+1}']/periods[i] > 0.8) and LS_dict[f'period_{i+1}']/periods[i] < 1.2)
-        
-def test_real_targets(p_min_thresh=0.05, p_max_thresh=100., samples_per_peak=50):
-    targ_dir = './tessilator/tests/targets_tests'
 
-    lcs = [f'{targ_dir}/Gaia_DR3_2314778985026776320_tests/lc_2314778985026776320_0029_1_2_reg_oflux.csv',
-           f'{targ_dir}/BD+20_2465_tests/lc_BD+20_2465_0045_3_4_cbv_oflux.csv',
-           f'{targ_dir}/GESJ08065664-4703000_tests/lc_GESJ08065664-4703000_0061_3_1_reg_oflux.csv',
-           f'{targ_dir}/ABDor_tests/lc_AB_Dor_0036_4_3_reg_oflux.csv']
-    periods = [13.375,6.719,2.492,0.514]
-    for i, (lc, period) in enumerate(zip(lcs, periods)):
-        converters = {'pass_sparse' : bool,
-                      'pass_clean_scatter' : bool,
-                      'pass_clean_outlier' : bool,
-                      'pass_full_outlier' : bool}
-        lc_data = Table.read(lc, converters=converters)
-        cln_cond = np.logical_and.reduce([
-                   lc_data["pass_clean_scatter"],
-                   lc_data["pass_clean_outlier"],
-                   lc_data["pass_full_outlier"]
-                   ])
-        cln = lc_data[cln_cond]
 
-        time = np.array(cln["time"])
-        nflux = np.array(cln["nflux_dtr"])
-        enflux = np.array(cln["nflux_err"])
-        ls = LombScargle(time, nflux, dy=enflux)
-        frequency, power = ls.autopower(minimum_frequency=1./p_max_thresh,
-                                        maximum_frequency=1./p_min_thresh,
-                                        samples_per_peak=samples_per_peak)
-        p_m = np.argmax(power)
-        period_1 = 1.0/frequency[p_m]
-        power_1 = power[p_m]
-        print(period_1, power_1)
-        if i == 0:
-            assert(period_1 > 5.)
-        else:
-            assert((period_1/period > 0.8) and (period_1/period < 1.2))
+@pytest.mark.parametrize(
+    "period,test_data,",
+    [
+        (
+            13.375,
+            "Gaia_DR3_2314778985026776320_tests/lc_2314778985026776320_0029_1_2_reg_oflux.csv",
+        ),
+        (6.719, "BD+20_2465_tests/lc_BD+20_2465_0045_3_4_cbv_oflux.csv"),
+        (
+            2.492,
+            "GESJ08065664-4703000_tests/lc_GESJ08065664-4703000_0061_3_1_reg_oflux.csv",
+        ),
+        (0.514, "ABDor_tests/lc_AB_Dor_0036_4_3_reg_oflux.csv"),
+    ],
+)
+def test_real_targets(
+    period, test_data, p_min_thresh=0.05, p_max_thresh=100.0, samples_per_peak=50
+):
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+
+    lc_data = Table.read(
+        f"{test_dir}/targets_tests/{test_data}", converters={"pass_*": bool}
+    )
+    cln_cond = np.logical_and.reduce(
+        [
+            lc_data["pass_clean_scatter"],
+            lc_data["pass_clean_outlier"],
+            lc_data["pass_full_outlier"],
+        ]
+    )
+    cln = lc_data[cln_cond]
+
+    time = np.array(cln["time"])
+    nflux = np.array(cln["nflux_dtr"])
+    enflux = np.array(cln["nflux_err"])
+    ls = LombScargle(time, nflux, dy=enflux)
+    frequency, power = ls.autopower(
+        minimum_frequency=1.0 / p_max_thresh,
+        maximum_frequency=1.0 / p_min_thresh,
+        samples_per_peak=samples_per_peak,
+    )
+    p_m = np.argmax(power)
+    period_1 = 1.0 / frequency[p_m]
+    # power_1 = power[p_m]
+    # print(period_1, power_1)
+    assert period_1 == pytest.approx(period, rel=0.2)

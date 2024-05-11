@@ -21,25 +21,31 @@ from operator import itemgetter
 from astropy.table import Table
 from astropy.io import ascii
 
-targ_dir = './tessilator/tests/targets_tests'
+import pytest
 
-aps = [f'{targ_dir}/Gaia_DR3_2314778985026776320_tests/ap_2314778985026776320_0029_1_2.csv',
-       f'{targ_dir}/BD+20_2465_tests/ap_BD+20_2465_0045_3_4.csv',
-       f'{targ_dir}/GESJ08065664-4703000_tests/ap_GESJ08065664-4703000_0061_3_1.csv',
-       f'{targ_dir}/ABDor_tests/ap_AB_Dor_0036_4_3.csv']
-lcs = [f'{targ_dir}/Gaia_DR3_2314778985026776320_tests/lc_2314778985026776320_0029_1_2_reg_oflux.csv',
-       f'{targ_dir}/BD+20_2465_tests/lc_BD+20_2465_0045_3_4_reg_oflux.csv',
-       f'{targ_dir}/GESJ08065664-4703000_tests/lc_GESJ08065664-4703000_0061_3_1_reg_oflux.csv',
-       f'{targ_dir}/ABDor_tests/lc_AB_Dor_0036_4_3_reg_oflux.csv']
 
-for ap_file, lc_file in zip(aps, lcs): 
-    ap_in = ascii.read(ap_file)
+@pytest.mark.parametrize(
+    "test_data",
+    [
+        "Gaia_DR3_2314778985026776320_tests/ap_2314778985026776320_0029_1_2",
+        "BD+20_2465_tests/ap_BD+20_2465_0045_3_4",
+        "GESJ08065664-4703000_tests/ap_GESJ08065664-4703000_0061_3_1",
+        "ABDor_tests/ap_AB_Dor_0036_4_3",
+    ],
+)
+def test_make_lcs(test_data):
+    """Run make_lc on fixed, known lightcurves and compare to fixed, known outputs"""
+    test_dir = os.path.dirname(os.path.abspath(__file__))
+    ap_in = ascii.read(f"{test_dir}/targets_tests/{test_data}.csv")
     ap_in = ap_in[ap_in["flux"] > 0.0]
-    lc_test = ascii.read(lc_file)
+    lcname = f"{test_dir}/targets_tests/{test_data}_reg_oflux.csv"
+    lcname = lcname.replace("ap_", "lc_")
+    lc_test = ascii.read(lcname, converters={"pass*": bool})
     lc_exam = make_lc(ap_in)[0]
-    for i in range(len(lc_exam)):#, lc_exam):
-        assert(str(lc_test['pass_sparse'][i]) == str(lc_exam['pass_sparse'][i]))
-        assert(str(lc_test['pass_clean_outlier'][i]) == str(lc_exam['pass_clean_outlier'][i]))
-        assert(str(lc_test['pass_clean_scatter'][i]) == str(lc_exam['pass_clean_scatter'][i]))
-        assert(str(lc_test['pass_full_outlier'][i]) == str(lc_exam['pass_full_outlier'][i]))
-
+    for col in lc_test.colnames:
+        if col == "nflux_dtr":
+            continue
+        # How precise do we expect this to be?
+        # We do not want to trigger this test every time a tiny things changes.
+        # So, set some limits that astrophysically make sense.
+        assert lc_test[col].data == pytest.approx(lc_exam[col].data, rel=1e-4, abs=1e-8)
